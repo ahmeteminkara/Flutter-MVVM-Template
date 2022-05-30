@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
+// Sayfa niteliği taşıyan class lara tanımlayabilirsin,
+// sayfanın içerisindeki bir componenti baseview den türetme
 class BaseView<T> extends StatefulWidget {
   final Widget Function(BuildContext context, T value) onPageBuilder;
   final T viewModel;
-  final Function(T model) onModelReady;
-  final VoidCallback onDispose;
+  final Function(T model)? onModelReady;
+  final VoidCallback? onDispose;
 
   const BaseView({
     Key? key,
     required this.viewModel,
-    required this.onModelReady,
     required this.onPageBuilder,
-    required this.onDispose,
+    this.onModelReady,
+    this.onDispose,
   }) : super(key: key);
 
   @override
@@ -22,12 +24,12 @@ class _BaseViewState extends State<BaseView> {
   @override
   void initState() {
     super.initState();
-    widget.onModelReady(widget.viewModel);
+    if (widget.onModelReady != null) widget.onModelReady!(widget.viewModel);
   }
 
   @override
   void dispose() {
-    widget.onDispose();
+    if (widget.onDispose != null) widget.onDispose!();
     super.dispose();
   }
 
